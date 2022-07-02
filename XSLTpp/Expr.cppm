@@ -109,8 +109,8 @@ static_assert(INTRINSICS_SIZE == 26);
 
 
 export struct Token {
-    std::string name;
-    TokenType   type;
+    std::string name = "";
+    TokenType   type = TokenType::NONE;
 
     void reset() {
         name = "";
@@ -119,7 +119,7 @@ export struct Token {
 };
 
 export std::vector<Token>  stack;
-export std::set<TokenType> expected;
+export std::set<TokenType> expected   = { TokenType::NONE };
 export TokenType           last_token = TokenType::NONE;
 
 struct Context {
@@ -246,7 +246,7 @@ export struct Intrinsic {
     void    (*func)();
 };
 
-export std::map<std::string, Intrinsic> token_map = {
+export std::map<std::string, Intrinsic> token_map = { // @TODO: add custom shit to this
 
     { TOK_START_DEFINE , { TokenType::SYN_START_DEFINE , syn_start_define  } },
     { TOK_END_DEFINE   , { TokenType::SYN_END_DEFINE   , syn_end_define    } },

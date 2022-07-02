@@ -183,7 +183,7 @@ export std::string xsltpp_parse(std::vector<Token> tokens) {
 
                 if(token_it == token_map.end()) {
 
-                    print_fmt("invalid token\n");
+                    // @TODO: check the custom shit
                     breakp();
                     break;
                 }
