@@ -33,8 +33,5 @@
     <ClCompile Include="CppTypes.cppm">
       <Filter>Module Files</Filter>
     </ClCompile>
-    <ClCompile Include="Funcs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

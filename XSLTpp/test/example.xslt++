@@ -1,35 +1,36 @@
-@@ PRINT_VALUE_W_PERMS ( VALUE )                                           @ 
-@@ `<xsl:call-template name="print_value_w_perms">`                        @ 
-@@ `  <xsl:with-param name="perms" select="$SHOW_` VALUE upper ## `"/>` ## @ 
-@@ `  <xsl:with-param name="value" select=` VALUE proper # ## `/>` ##      @ 
-@@ `</xsl:call-template>`                                                  @ 
+#define PRINT_VALUE_W_PERMS ( VALUE )
+`<xsl:call-template name="print_value_w_perms">`
+`  <xsl:with-param name="perms" select="$SHOW_` VALUE upper ## `"/>` ##
+`  <xsl:with-param name="value" select=` VALUE proper # ## `/>` ##
+`</xsl:call-template>`
+#end
 
 head
 
 stylesheet
-	`text` output
-	`12d_common.xslt` include
-	
+  `text` output
+  `12d_common.xslt` include
+  
   `field delimiter`                                                                         comment
   `The default delimiter is a tab despite this being for a comma-separated values filename` comment
   `This is to ensure MS Excel can open the resulting file.`                                 comment
   `MS Excel does not correctly read/interpret CSV files in Unicode.`                        comment
   `Changing to tab-delimited allows the file to be read in correctly by MS Excel`           comment
-	
-	`DELIM` variable `<xsl:text>&tab;</xsl:text>` end
-	// or alternatively
-	`DELIM` variable text `&tab;` end end
-	
-	
-	`print_value_w_perms` template
-		`perms` param
-		`value` param
-		
-		`$perms = 1` if
-			`print_upper_or_lower` call-template
-			  `$value` with-param
-			end
-			`$DELIM` value-of
-		end
-	end
+  
+  `DELIM` variable `<xsl:text>&tab;</xsl:text>` end
+  // or alternatively
+  `DELIM` variable text `&tab;` end end
+  
+  
+  `print_value_w_perms` template
+    `perms` param
+    `value` param
+    
+    `$perms = 1` if
+      `print_upper_or_lower` call-template
+        `$value` with-param
+      end
+      `$DELIM` value-of
+    end
+  end
 end

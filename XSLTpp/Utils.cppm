@@ -39,12 +39,12 @@ export std::string file_to_str(const std::string& path) {
     char *buffer = 0;
     i32   length;
 
-    assert_if(file == nullptr, "file == nullptr");
+    assert_if(file == nullptr, "file == nullptr\n");
 
     length = file_length(file);
     buffer = new char[length];
 
-    assert_if(buffer == nullptr, "buffer == nullptr");
+    assert_if(buffer == nullptr, "buffer == nullptr\n");
     
     fread(buffer, sizeof(char), length, file);
     fclose(file);
@@ -67,15 +67,6 @@ inline const bool is_whitespace(const char c){
     return c == '\t' || c == ' ' || c == '\n' || c == '\r' || c == '\f';
 }
 
-export struct Token {
-    std::string name = "";
-    TokenType   type = TokenType::NONE;
-
-    void reset() {
-        name = "";
-        type = TokenType::NONE;
-    }
-};
 
 export std::vector<Token> xsltpp_lex(const std::string &xsltpp_raw) {
     
@@ -95,6 +86,7 @@ export std::vector<Token> xsltpp_lex(const std::string &xsltpp_raw) {
                 if(c == '`') {
 
                     curr_token.type = TokenType::RAW_XSLT;
+                    curr_token.name += c;
 
                 } else if(c == '/') {
 
@@ -117,14 +109,13 @@ export std::vector<Token> xsltpp_lex(const std::string &xsltpp_raw) {
             
             case TokenType::RAW_XSLT: {
 
+                curr_token.name += c;
+
                 if(c == '`') {
 
                     tokens.push_back(curr_token);
                     curr_token.reset();
 
-                } else {
-
-                    curr_token.name += c;
                 }
                 break;
             }
@@ -151,6 +142,12 @@ export std::vector<Token> xsltpp_lex(const std::string &xsltpp_raw) {
                 }
                 break;
             }
+
+            default: {
+
+                breakp();
+                break;
+            }
         }
 
         prev_char = c;
@@ -159,10 +156,17 @@ export std::vector<Token> xsltpp_lex(const std::string &xsltpp_raw) {
     return tokens;
 }
 
-export std::string xsltpp_parse(std::vector<Token> tokens) {
 
+bool expected_type(TokenType type) {
+
+    auto it = expected.find(type);
+    if(it != expected.end()) return true;
     
+    it = expected.find(TokenType::NONE);
+    return (it == expected.end()) ? false : true;
+}
 
+export std::string xsltpp_parse(std::vector<Token> tokens) {
 
     for(const Token &token : tokens) {
 
@@ -175,16 +179,26 @@ export std::string xsltpp_parse(std::vector<Token> tokens) {
 
             case TokenType::WORD: {
 
-                auto it = intrinsics.find(token.name);
-                if(it != intrinsics.end()) {
+                auto token_it = token_map.find(token.name);
 
-                    //print(it->first + "\n");
+                if(token_it == token_map.end()) {
 
-                    (it->second.func)();
-
-                } else {
-
+                    print_fmt("invalid token\n");
+                    breakp();
+                    break;
                 }
+
+                Intrinsic &const curr_token = token_it->second;
+
+                const bool is_expected = expected_type(curr_token.type);
+                if(is_expected == false) {
+
+                    print_fmt("expected a different type, was given {}\n", (i32)curr_token.type);
+                    breakp();
+                    break;
+                }
+
+                (curr_token.func)();
                 break;
             }
 

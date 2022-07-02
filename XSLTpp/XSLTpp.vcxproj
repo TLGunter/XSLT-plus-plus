@@ -145,7 +145,6 @@
     <ClCompile Include="CppTypes.cppm" />
     <ClCompile Include="Debug.cppm" />
     <ClCompile Include="Expr.cppm" />
-    <ClCompile Include="Funcs.cpp" />
     <ClCompile Include="Utils.cppm" />
     <ClCompile Include="XSLT++.cpp" />
   </ItemGroup>

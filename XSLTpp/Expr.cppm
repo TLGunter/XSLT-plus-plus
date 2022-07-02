@@ -1,36 +1,36 @@
 
 #if __INTELLISENSE__
     #include "CppTypes.cppm"
+    #include "Debug.cppm"
     #include <string>
     #include <map>
     #include <vector>
+    #include <set>
 #else
     import CppTypes;
+    import Debug;
     import <string>;
     import <map>;
     import <vector>;
+    import <set>;
 #endif
 
 
 export module Expr;
 
-
+using namespace Debug;
 
 export enum class TokenType {
+    //Primitive types
     NONE,
-    RAW_XSLT,
     COMMENT,
     WORD,
-};
+    RAW_XSLT,
 
+    // Custom
+    MACRO,
 
-
-// SYN: reserved syntax
-// FUN: xslt++ function
-// NAT: mimic native xslt
-enum class IntrinsicType {
-    NONE,
-
+    // SYN: reserved syntax
     SYN_BEGIN,
     SYN_START_DEFINE,
     SYN_END_DEFINE,
@@ -38,6 +38,7 @@ enum class IntrinsicType {
     SYN_RIGHT_PAREN,
     SYN_FINISH,
 
+    // FUN: xslt++ function
     FUN_BEGIN,
     FUN_CONCAT,
     FUN_STRINGIFY,
@@ -47,6 +48,7 @@ enum class IntrinsicType {
     FUN_TO_CAMEL,
     FUN_FINISH,
 
+    // NAT: mimic native xslt
     NAT_BEGIN,
     NAT_END,
     NAT_HEAD,
@@ -62,15 +64,18 @@ enum class IntrinsicType {
     NAT_TEMPLATE,
     NAT_CALL_TEMPLATE,
     NAT_FINISH,
+
+    SIZE
 };
-constexpr I32 SYN_SIZE        = (I32)IntrinsicType::SYN_FINISH - (I32)IntrinsicType::SYN_BEGIN;
-constexpr I32 FUN_SIZE        = (I32)IntrinsicType::FUN_FINISH - (I32)IntrinsicType::FUN_BEGIN;
-constexpr I32 NAT_SIZE        = (I32)IntrinsicType::NAT_FINISH - (I32)IntrinsicType::NAT_BEGIN;
+constexpr I32 SYN_SIZE        = (I32)TokenType::SYN_FINISH - (I32)TokenType::SYN_BEGIN;
+constexpr I32 FUN_SIZE        = (I32)TokenType::FUN_FINISH - (I32)TokenType::FUN_BEGIN;
+constexpr I32 NAT_SIZE        = (I32)TokenType::NAT_FINISH - (I32)TokenType::NAT_BEGIN;
 constexpr I32 INTRINSICS_SIZE = SYN_SIZE + FUN_SIZE + NAT_SIZE;
+constexpr I32 TOKENS_SIZE     = (I32)TokenType::SIZE;
 
 
-const std::string TOK_START_DEFINE  = "@@";
-const std::string TOK_END_DEFINE    = "@";
+const std::string TOK_START_DEFINE  = "#define";
+const std::string TOK_END_DEFINE    = "#end";
 const std::string TOK_LEFT_PAREN    = "(";
 const std::string TOK_RIGHT_PAREN   = ")";
 static_assert(SYN_SIZE == 5 );
@@ -103,41 +108,40 @@ static_assert(INTRINSICS_SIZE == 26);
 
 
 
-enum class StackObjectType {
-    NONE,
-    ANY,
-    RAW_XSLT,
-    INTRINSIC,
-    CUSTOM,
+export struct Token {
+    std::string name;
+    TokenType   type;
+
+    void reset() {
+        name = "";
+        type = TokenType::NONE;
+    }
 };
 
-struct StackObject {
-    StackObjectType type;
-    std::string     name;
-};
+export std::vector<Token>  stack;
+export std::set<TokenType> expected;
+export TokenType           last_token = TokenType::NONE;
 
-std::vector<StackObject> stack;
-
-
-
-
-StackObjectType          expected;
-IntrinsicType            last_intrinsic = IntrinsicType::NONE;
-bool                     define_context = false;
+struct Context {
+    bool in_define = false;
+    bool in_params = false;
+} ctx;
 
 #pragma region Functions
 
 void syn_start_define() {
 
-    // Need a generic token list not a split one between intrinsics and custom shit
+    if(ctx.in_define == true) {
 
-    if(define_context == false && 
-       last_intrinsic != IntrinsicType::SYN_END_DEFINE) {
+        print("No `#define` allowed in another `#define`");
+        breakp();
 
-        expected = StackObjectType::CUSTOM;
+    } else {
 
-        define_context = true;
-        last_intrinsic = IntrinsicType::SYN_START_DEFINE;
+        expected = { TokenType::WORD };
+        
+        ctx.in_define = true;
+        last_token    = TokenType::SYN_START_DEFINE;
     }
 }
 
@@ -152,6 +156,7 @@ void syn_left_paren() {
 void syn_right_paren() {
 
 }
+static_assert(SYN_SIZE == 5 );
 
 void fun_concat() {
 
@@ -176,6 +181,7 @@ void fun_to_proper() {
 void fun_to_camel() {
 
 }
+static_assert(FUN_SIZE == 7 );
 
 void nat_end() {
 
@@ -228,45 +234,48 @@ void nat_template() {
 void nat_call_template() {
 
 }
+static_assert(NAT_SIZE == 14);
 
 #pragma endregion
 
 
 
 
-struct Intrinsic {
-    IntrinsicType type;
-    void        (*func)();
+export struct Intrinsic {
+    TokenType type;
+    void    (*func)();
 };
 
-export std::map<std::string, Intrinsic> intrinsics = {
-    { TOK_START_DEFINE , { IntrinsicType::SYN_START_DEFINE , syn_start_define  } },
-    { TOK_END_DEFINE   , { IntrinsicType::SYN_END_DEFINE   , syn_end_define    } },
-    { TOK_LEFT_PAREN   , { IntrinsicType::SYN_LEFT_PAREN   , syn_left_paren    } },
-    { TOK_RIGHT_PAREN  , { IntrinsicType::SYN_RIGHT_PAREN  , syn_right_paren   } },
+export std::map<std::string, Intrinsic> token_map = {
 
-    { TOK_CONCAT       , { IntrinsicType::FUN_CONCAT       , fun_concat        } },
-    { TOK_STRINGIFY    , { IntrinsicType::FUN_STRINGIFY    , fun_stringify     } },
-    { TOK_TO_UPPER     , { IntrinsicType::FUN_TO_UPPER     , fun_to_upper      } },
-    { TOK_TO_LOWER     , { IntrinsicType::FUN_TO_LOWER     , fun_to_lower      } },
-    { TOK_TO_PROPER    , { IntrinsicType::FUN_TO_PROPER    , fun_to_proper     } },
-    { TOK_TO_CAMEL     , { IntrinsicType::FUN_TO_CAMEL     , fun_to_camel      } },
+    { TOK_START_DEFINE , { TokenType::SYN_START_DEFINE , syn_start_define  } },
+    { TOK_END_DEFINE   , { TokenType::SYN_END_DEFINE   , syn_end_define    } },
+    { TOK_LEFT_PAREN   , { TokenType::SYN_LEFT_PAREN   , syn_left_paren    } },
+    { TOK_RIGHT_PAREN  , { TokenType::SYN_RIGHT_PAREN  , syn_right_paren   } },
 
-    { TOK_END          , { IntrinsicType::NAT_END          , nat_end           } },
-    { TOK_HEAD         , { IntrinsicType::NAT_HEAD         , nat_head          } },
-    { TOK_COMMENT      , { IntrinsicType::NAT_COMMENT      , nat_comment       } },
-    { TOK_OUTPUT       , { IntrinsicType::NAT_OUTPUT       , nat_output        } },
-    { TOK_INCLUDE      , { IntrinsicType::NAT_INCLUDE      , nat_include       } },
-    { TOK_VALUE_OF     , { IntrinsicType::NAT_VALUE_OF     , nat_value_of      } },
-    { TOK_PARAM        , { IntrinsicType::NAT_PARAM        , nat_param         } },
-    { TOK_WITH_PARAM   , { IntrinsicType::NAT_WITH_PARAM   , nat_with_param    } },      
-    { TOK_STYLESHEET   , { IntrinsicType::NAT_STYLESHEET   , nat_stylesheet    } },
-    { TOK_VARIABLE     , { IntrinsicType::NAT_VARIABLE     , nat_variable      } },
-    { TOK_TEXT         , { IntrinsicType::NAT_TEXT         , nat_text          } },
-    { TOK_TEMPLATE     , { IntrinsicType::NAT_TEMPLATE     , nat_template      } },
-    { TOK_CALL_TEMPLATE, { IntrinsicType::NAT_CALL_TEMPLATE, nat_call_template } },
+    { TOK_CONCAT       , { TokenType::FUN_CONCAT       , fun_concat        } },
+    { TOK_STRINGIFY    , { TokenType::FUN_STRINGIFY    , fun_stringify     } },
+    { TOK_TO_UPPER     , { TokenType::FUN_TO_UPPER     , fun_to_upper      } },
+    { TOK_TO_LOWER     , { TokenType::FUN_TO_LOWER     , fun_to_lower      } },
+    { TOK_TO_PROPER    , { TokenType::FUN_TO_PROPER    , fun_to_proper     } },
+    { TOK_TO_CAMEL     , { TokenType::FUN_TO_CAMEL     , fun_to_camel      } },
+
+    { TOK_END          , { TokenType::NAT_END          , nat_end           } },
+    { TOK_HEAD         , { TokenType::NAT_HEAD         , nat_head          } },
+    { TOK_COMMENT      , { TokenType::NAT_COMMENT      , nat_comment       } },
+    { TOK_OUTPUT       , { TokenType::NAT_OUTPUT       , nat_output        } },
+    { TOK_INCLUDE      , { TokenType::NAT_INCLUDE      , nat_include       } },
+    { TOK_VALUE_OF     , { TokenType::NAT_VALUE_OF     , nat_value_of      } },
+    { TOK_PARAM        , { TokenType::NAT_PARAM        , nat_param         } },
+    { TOK_WITH_PARAM   , { TokenType::NAT_WITH_PARAM   , nat_with_param    } },      
+    { TOK_STYLESHEET   , { TokenType::NAT_STYLESHEET   , nat_stylesheet    } },
+    { TOK_VARIABLE     , { TokenType::NAT_VARIABLE     , nat_variable      } },
+    { TOK_TEXT         , { TokenType::NAT_TEXT         , nat_text          } },
+    { TOK_TEMPLATE     , { TokenType::NAT_TEMPLATE     , nat_template      } },
+    { TOK_CALL_TEMPLATE, { TokenType::NAT_CALL_TEMPLATE, nat_call_template } },
 };
 static_assert(SYN_SIZE        == 5 );
 static_assert(FUN_SIZE        == 7 );
 static_assert(NAT_SIZE        == 14);
 static_assert(INTRINSICS_SIZE == 26);
+static_assert(TOKENS_SIZE     == 34);
