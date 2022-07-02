@@ -1,0 +1,10 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "c:\\users\\tadgh admin\\source\\repos\\xsltpp\\xsltpp\\cpptypes.cppm",
+        "ProvidedModule": "CppTypes",
+        "Includes": [],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

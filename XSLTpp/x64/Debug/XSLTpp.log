@@ -1,0 +1,38 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(514,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (XSLT++.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Scanning sources for module dependencies...
+  Expr.cppm
+  Utils.cppm
+  Compiling...
+  Expr.cppm
+C:\Users\Tadgh Admin\source\repos\XSLTpp\XSLTpp\Expr.cppm(12,19): warning C5201: a module declaration can appear only at the start of a translation unit unless a global module fragment is used
+  Utils.cppm
+C:\Users\Tadgh Admin\source\repos\XSLTpp\XSLTpp\Utils.cppm(19,20): warning C5201: a module declaration can appear only at the start of a translation unit unless a global module fragment is used
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\vector(646,1): warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\vector(620): message : see reference to function template instantiation 'Token *std::vector<Token,std::allocator<Token>>::_Emplace_reallocate<const _Ty&>(Token *const ,const _Ty &)' being compiled
+          with
+          [
+              _Ty=Token
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\vector(628): message : see reference to function template instantiation 'Token *std::vector<Token,std::allocator<Token>>::_Emplace_reallocate<const _Ty&>(Token *const ,const _Ty &)' being compiled
+          with
+          [
+              _Ty=Token
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\vector(637): message : see reference to function template instantiation '_Ty &std::vector<_Ty,std::allocator<_Ty>>::emplace_back<const _Ty&>(const _Ty &)' being compiled
+          with
+          [
+              _Ty=Token
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.31.31103\include\vector(636): message : while compiling class template member function 'void std::vector<Token,std::allocator<Token>>::push_back(const _Ty &)'
+          with
+          [
+              _Ty=Token
+          ]
+C:\Users\Tadgh Admin\source\repos\XSLTpp\XSLTpp\Utils.cppm(122): message : see reference to function template instantiation 'void std::vector<Token,std::allocator<Token>>::push_back(const _Ty &)' being compiled
+          with
+          [
+              _Ty=Token
+          ]
+C:\Users\Tadgh Admin\source\repos\XSLTpp\XSLTpp\Utils.cppm(80): message : see reference to class template instantiation 'std::vector<Token,std::allocator<Token>>' being compiled
+  XSLT++.cpp
+  XSLTpp.vcxproj -> C:\Users\Tadgh Admin\source\repos\XSLTpp\x64\Debug\XSLTpp.exe

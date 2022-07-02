@@ -1,0 +1,9 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "c:\\users\\tadgh admin\\source\\repos\\xsltpp\\xsltpp\\lib.cppm",
+        "ProvidedModule": "lib",
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

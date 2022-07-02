@@ -1,0 +1,27 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "c:\\users\\tadgh admin\\source\\repos\\xsltpp\\xsltpp\\debug.cppm",
+        "ProvidedModule": "Debug",
+        "Includes": [],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": [
+            {
+                "Header": "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.31.31103\\include\\cstdio",
+                "BMI": "C:\\Users\\Tadgh Admin\\source\\repos\\XSLTpp\\XSLTpp\\x64\\Debug\\cstdio_RWZPBV5F68QNXSEE.ifc"
+            },
+            {
+                "Header": "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.31.31103\\include\\string",
+                "BMI": "C:\\Users\\Tadgh Admin\\source\\repos\\XSLTpp\\XSLTpp\\x64\\Debug\\string_8TEYAKQDT4EPFR4W.ifc"
+            },
+            {
+                "Header": "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.31.31103\\include\\string_view",
+                "BMI": "C:\\Users\\Tadgh Admin\\source\\repos\\XSLTpp\\XSLTpp\\x64\\Debug\\string_view_TIOSQQP3603J07ZR.ifc"
+            },
+            {
+                "Header": "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.31.31103\\include\\format",
+                "BMI": "C:\\Users\\Tadgh Admin\\source\\repos\\XSLTpp\\XSLTpp\\x64\\Debug\\format_LK36UJIRT9VHKK30.ifc"
+            }
+        ]
+    }
+}

@@ -1,0 +1,28 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "c:\\users\\tadgh admin\\source\\repos\\xsltpp\\xsltpp\\lib.cppm",
+        "ProvidedModule": "lib",
+        "Includes": [],
+        "ImportedModules": [
+            {
+                "Name": "Debug",
+                "BMI": "C:\\Users\\Tadgh Admin\\source\\repos\\XSLTpp\\XSLTpp\\x64\\Debug\\Debug.cppm.ifc"
+            }
+        ],
+        "ImportedHeaderUnits": [
+            {
+                "Header": "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.31.31103\\include\\iostream",
+                "BMI": "C:\\Users\\Tadgh Admin\\source\\repos\\XSLTpp\\XSLTpp\\x64\\Debug\\iostream_0UQWQZITSB7UXUWJ.ifc"
+            },
+            {
+                "Header": "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.31.31103\\include\\string",
+                "BMI": "C:\\Users\\Tadgh Admin\\source\\repos\\XSLTpp\\XSLTpp\\x64\\Debug\\string_8TEYAKQDT4EPFR4W.ifc"
+            },
+            {
+                "Header": "c:\\program files\\microsoft visual studio\\2022\\community\\vc\\tools\\msvc\\14.31.31103\\include\\vector",
+                "BMI": "C:\\Users\\Tadgh Admin\\source\\repos\\XSLTpp\\XSLTpp\\x64\\Debug\\vector_ZJKN0OGHGIL1KBDQ.ifc"
+            }
+        ]
+    }
+}
