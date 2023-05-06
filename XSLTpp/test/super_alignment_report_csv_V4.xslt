@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE stylesheet [
-    <!ENTITY tab     "&#9;" >
-    <!ENTITY lf     "&#10;" >
-    <!ENTITY cr     "&#13;" >
+    <!ENTITY tab "&#9;" >
+    <!ENTITY lf  "&#10;">
+    <!ENTITY cr  "&#13;">
 ]>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd12d="http://www.12d.com/schema/xml12d-10.0">
   <xsl:output method="text"/>

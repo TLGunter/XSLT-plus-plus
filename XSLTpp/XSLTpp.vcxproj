@@ -142,11 +142,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CppTypes.cppm" />
-    <ClCompile Include="Debug.cppm" />
-    <ClCompile Include="Expr.cppm" />
-    <ClCompile Include="Utils.cppm" />
-    <ClCompile Include="XSLT++.cpp" />
+    <ClCompile Include="CppTypes.ixx" />
+    <ClCompile Include="Debug.ixx" />
+    <ClCompile Include="Expr.ixx" />
+    <ClCompile Include="Utils.ixx" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

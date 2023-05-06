@@ -3,11 +3,11 @@
 `  <xsl:with-param name="perms" select="$SHOW_` VALUE upper ## `"/>` ##
 `  <xsl:with-param name="value" select=` VALUE proper # ## `/>` ##
 `</xsl:call-template>`
-#end
+#end_define
 
 head
 
-stylesheet
+stylesheet{
   `text` output
   `12d_common.xslt` include
   
@@ -17,20 +17,22 @@ stylesheet
   `MS Excel does not correctly read/interpret CSV files in Unicode.`                        comment
   `Changing to tab-delimited allows the file to be read in correctly by MS Excel`           comment
   
-  `DELIM` variable `<xsl:text>&tab;</xsl:text>` end
+  `DELIM` variable{ `<xsl:text>&tab;</xsl:text>` }variable
   // or alternatively
-  `DELIM` variable text `&tab;` end end
+  `DELIM` variable{ text{ `&tab;` }text }variable
   
   
-  `print_value_w_perms` template
+  `print_value_w_perms` template{
     `perms` param
     `value` param
     
-    `$perms = 1` if
-      `print_upper_or_lower` call-template
+    `$perms = 1` if{
+		
+      `print_upper_or_lower` call-template{
         `$value` with-param
-      end
+      }call-template
+			
       `$DELIM` value-of
-    end
-  end
-end
+    }if
+  }template
+}stylesheet

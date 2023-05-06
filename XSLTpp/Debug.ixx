@@ -1,34 +1,27 @@
 
-#if __INTELLISENSE__
-    #include <cstdio>
-    #include <string>
-    #include <string_view>
-    #include <format>
-#else
-    import <cstdio>;
-    import <string>;
-    import <string_view>;
-    import <format>;
-#endif
+import <cstdio>;
+import <string_view>;
+import <format>;
 
 export module Debug;
 
 namespace Debug {
 
     export void assert_if(bool exp, std::string_view text, bool kill);
-    //export void assert_str(bool exp, char            *text);
+
     export void breakp(bool exp);
     export void breakp();
-    export void print (const std::string &text);
-    export void print (const char        *text);
+
+    export void print(const std::string_view text);
     export template<typename... Args> void print_fmt(std::string_view fmt_str, Args&&... args);
-    export void debug (const std::string &text);
-    export void debug (const char        *text);
+
+    export void debug(const std::string_view text);
     export template<typename... Args> void debug_fmt(std::string_view fmt_str, Args&&... args);
 
 
 
     export void assert_if(bool exp, std::string_view text, bool kill = false) {
+
     #ifdef _DEBUG
         if(exp == true) {
 
@@ -48,42 +41,38 @@ namespace Debug {
     }
 
     export void breakp(bool exp) {
+
     #ifdef _DEBUG
         if(exp == true) __debugbreak();
     #endif
     }
 
     export void breakp() {
+
     #ifdef _DEBUG
         __debugbreak();
     #endif
     }
 
-    export void print(const std::string &text) {
-        printf(text.c_str());
-    }
+    export void print(const std::string_view text) {
 
-    export void print(const char *text) {
-        printf(text);
+        printf(text.data());
     }
 
     export template<typename... Args> void print_fmt(std::string_view fmt_str, Args&&... args) {
+
         printf(std::vformat(fmt_str, std::make_format_args(args...)).c_str());
     }
 
-    export void debug(const std::string &text) {
-    #ifdef _DEBUG
-        printf(text.c_str());
-    #endif
-    }
+    export void debug(const std::string_view text) {
 
-    export void debug(const char *text) {
     #ifdef _DEBUG
-        printf(text);
+        printf(text.data());
     #endif
     }
 
     export template<typename... Args> void debug_fmt(std::string_view fmt_str, Args&&... args) {
+
     #ifdef _DEBUG
         printf(std::vformat(fmt_str, std::make_format_args(args...)).c_str());
     #endif
